@@ -1,0 +1,43 @@
+<div class="bg-light shadow-sm py-3 px-4 d-flex justify-content-between align-items-center mb-4">
+ 
+  <div style="width: 100px;"></div>
+
+
+  <div class="fw-bold fs-4 text-purple text-center flex-grow-1">Hairitege</div>
+
+
+  <div>
+    <%= link_to "← Back to Dashboard", stylist_dashboard_path, class: "btn btn-outline-secondary" %>
+  </div>
+</div>
+
+<h2 class="mb-4 text-center">Recommend Products for <%= @client.name %></h2>
+
+<div class="row justify-content-center">
+
+  <% [@shampoo, @conditioner].each do |product| %>
+    <% next unless product %>
+
+    <div class="col-md-5 mb-4">
+      <div class="card h-100 shadow-sm" id="<%= dom_id(product) %>">
+        <div class="card-body text-center">
+          <h4 class="card-title"><%= product.name %></h4>
+          <p class="card-text"><%= product.description %></p>
+
+          <% recommendation = @client.recommendations.find_by(product_id: product.id) %>
+
+          <% if recommendation %>
+            <%= button_to "Unrecommend", client_recommendation_path(@client, recommendation),
+                          method: :delete,
+                          form: { data: { turbo_confirm: "Remove this product from the Mane Vault?" } },
+                          class: "btn btn-danger w-100" %>
+          <% else %>
+            <%= button_to "Recommend", client_recommendations_path(@client, recommendation: { product_id: product.id }),
+                          method: :post, class: "btn btn-primary w-100" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+  <% end %>
+</div>

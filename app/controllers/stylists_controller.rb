@@ -8,50 +8,57 @@ class StylistsController < ApplicationController
   end
 
   def create_client
-  @new_client = User.new(client_params)
-  @new_client.role = "client"  # ensure role is set
+    @new_client = User.new(client_params)
+    @new_client.role = "client"
 
-  if @new_client.save
-    # Step 1: make sure there’s at least one product
-    default_product = Product.first
-    unless default_product
-      flash[:alert] = "You must create a product before adding clients."
-      redirect_to stylist_dashboard_path and return
+    if @new_client.save
+      default_product = Product.first
+      unless default_product
+        flash[:alert] = "You must create a product before adding clients."
+        redirect_to stylist_dashboard_path and return
+      end
+
+      Recommendation.create!(
+        stylist_id: current_user.id,
+        client_id: @new_client.id,
+        product_id: default_product.id,
+      )
+
+      redirect_to stylist_dashboard_path, notice: "Client added successfully."
+    else
+      # If save failed, re-render dashboard with errors
+      Rails.logger.debug @new_client.errors.full_messages
+      @stylist = current_user
+      @clients = @stylist.clients.reload
+      flash.now[:alert] = @new_client.errors.full_messages.join(", ")
+      render :dashboard
     end
 
-    # Step 2: create recommendation linking stylist and client
-    Recommendation.create!(
-      stylist_id: current_user.id,
-      client_id: @new_client.id,
-      product_id: default_product.id
-    )
+    def remove_client
+      client = User.find(params[:id])
+      recommendation = Recommendation.find_by(stylist_id: current_user.id, client_id: client.id)
 
-    # Step 3: redirect back to dashboard
-    redirect_to stylist_dashboard_path, notice: "Client added successfully."
-  else
-    # If save failed, re-render dashboard with errors
-    Rails.logger.debug @new_client.errors.full_messages
-    @stylist = current_user
-    @clients = @stylist.clients.reload
-    flash.now[:alert] = @new_client.errors.full_messages.join(", ")
-    render :dashboard
+      if recommendation
+        recommendation.destroy
+        flash[:notice] = "#{client.name} has been removed from your clients."
+      else
+        flash[:alert] = "Client not found."
+      end
+
+      redirect_to stylist_dashboard_path
+    end
   end
 
   def remove_client
+    @stylist = current_user
     client = User.find(params[:id])
-    recommendation = Recommendation.find_by(stylist_id: current_user.id, client_id: client.id)
 
-    if recommendation
-      recommendation.destroy
-      flash[:notice] = "#{client.name} has been removed from your clients."
+    if @stylist.clients.delete(client)
+      redirect_to stylist_dashboard_path, notice: "#{client.name} has been removed from your clients."
     else
-      flash[:alert] = "Client not found."
+      redirect_to stylist_dashboard_path, alert: "Could not remove #{client.name}."
     end
-
-    redirect_to stylist_dashboard_path
   end
-end
-
 
   private
 

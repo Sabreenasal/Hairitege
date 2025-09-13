@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   get "clients/:client_id/mane_vault", to: "clients#mane_vault", as: :mane_vault
   delete "stylists/:id/remove_client", to: "stylists#remove_client", as: :remove_client
 
+
   resources :recommendations, only: [:edit, :update]
 
   resources :stylists, only: [] do
@@ -17,6 +18,6 @@ Rails.application.routes.draw do
   end
 
   resources :clients, only: [] do
-    resources :recommendations, only: [:new, :create]
+    resources :recommendations, only: [:new, :create, :destroy, :index]
   end
 end

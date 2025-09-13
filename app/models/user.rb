@@ -1,19 +1,35 @@
+# == Schema Information
+#
+# Table name: users
+#
+#  id                     :bigint           not null, primary key
+#  email                  :string           default(""), not null
+#  encrypted_password     :string           default(""), not null
+#  name                   :string
+#  remember_created_at    :datetime
+#  reset_password_sent_at :datetime
+#  reset_password_token   :string
+#  role                   :string
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#
+# Indexes
+#
+#  index_users_on_email                 (email) UNIQUE
+#  index_users_on_reset_password_token  (reset_password_token) UNIQUE
+#
 class User < ApplicationRecord
-  # Devise modules
+ 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  # Role can be 'stylist' or 'client'
-  # You may want to validate presence of role:
+ 
   validates :role, presence: true, inclusion: { in: %w[stylist client] }
 
-  # Associations
-  # A stylist has many recommendations for their clients
+  
   has_many :given_recommendations, class_name: "Recommendation", foreign_key: "stylist_id", dependent: :destroy
 
-  # A client has many recommendations
   has_many :recommendations, foreign_key: "client_id", dependent: :destroy
 
-  # Helper: stylist has many clients through recommendations
-  has_many :clients, through: :given_recommendations, source: :client
+  has_many :clients, -> { distinct }, through: :given_recommendations, source: :client
 end
