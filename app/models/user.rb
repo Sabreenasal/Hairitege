@@ -32,4 +32,12 @@ class User < ApplicationRecord
   has_many :recommendations, foreign_key: "client_id", dependent: :destroy
 
   has_many :clients, -> { distinct }, through: :given_recommendations, source: :client
+   
+  def stylist?
+    role == "stylist"
+  end
+
+  def client?
+    role == "client"
+  end
 end

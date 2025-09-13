@@ -1,6 +1,6 @@
 class RecommendationsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_recommendation, only: [:destroy]
+  before_action :set_recommendation, only: [:update, :destroy]
 
 
   def index
@@ -21,15 +21,15 @@ end
       return
     end
 
-    # Load the products to recommend
+ 
     @shampoo = Product.find_by(name: "Gentle Shampoo")
     @conditioner = Product.find_by(name: "Hydrating Conditioner")
 
-    # Prepare a new recommendation object
+ 
     @recommendation = Recommendation.new(client: @client, stylist: current_user)
   end
 
-  # POST /clients/:client_id/recommendations
+  
   def create
     @client = User.find_by(id: params[:client_id])
     unless @client
@@ -49,16 +49,30 @@ end
     end
   end
 
-  # DELETE /clients/:client_id/recommendations/:id
-  def destroy
-    @client = @recommendation.client
-    @recommendation.destroy
-
-    respond_to do |format|
-      format.turbo_stream
-      format.html { redirect_to client_recommendations_path(@client), notice: "Recommendation removed!" }
-    end
+    def update
+  @recommendation = Recommendation.find(params[:id])
+  if @recommendation.update(recommendation_params)
+    redirect_path = params[:redirect_to].presence || client_recommendations_path(@recommendation.client)
+    redirect_to redirect_path, notice: "Notes updated!"
+  else
+    flash.now[:alert] = @recommendation.errors.full_messages.join(", ")
+    redirect_path = params[:redirect_to].presence || client_recommendations_path(@recommendation.client)
+    redirect_to redirect_path
   end
+end
+  
+def destroy
+  @recommendation = Recommendation.find(params[:id])
+  @client = @recommendation.client
+  @recommendation.destroy
+
+  redirect_path = params[:redirect_to].presence || client_recommendations_path(@client)
+  
+  respond_to do |format|
+    format.turbo_stream
+    format.html { redirect_to redirect_path, notice: "Recommendation removed!" }
+  end
+end
 
   private
 
@@ -67,6 +81,6 @@ end
   end
 
   def recommendation_params
-    params.require(:recommendation).permit(:product_id)
+    params.require(:recommendation).permit(:product_id, :notes)
   end
 end

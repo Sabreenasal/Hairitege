@@ -12,8 +12,12 @@
       <div class="text-center mt-4 p-3" style="background-color: rgba(108, 92, 231, 0.1); border-radius: 12px;">
         <%= link_to "Go to Your Dashboard", stylist_dashboard_path, class: "btn btn-primary btn-xl px-5 py-3 fw-bold" %>
       </div>
+    <% elsif current_user.role == "client" %>
+      <div class="text-center mt-4 p-3" style="background-color: rgba(108, 92, 231, 0.1); border-radius: 12px;">
+        <%= link_to "Go to Your Mane Vault", mane_vault_path(client_id: current_user.id), class: "btn btn-success btn-xl px-5 py-3 fw-bold" %>
+      </div>
     <% end %>
-    
+
   <% else %>
     <div class="d-flex justify-content-center gap-3 flex-wrap mt-3">
       <%= link_to "Sign In", new_user_session_path, class: "btn btn-primary btn-lg" %>
