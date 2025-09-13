@@ -15,4 +15,8 @@ Rails.application.routes.draw do
       post "create_client", to: "stylists#create_client"
     end
   end
+
+  resources :clients, only: [] do
+    resources :recommendations, only: [:new, :create]
+  end
 end

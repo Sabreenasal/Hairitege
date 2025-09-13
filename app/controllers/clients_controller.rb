@@ -3,7 +3,6 @@ class ClientsController < ApplicationController
 
   def mane_vault
     @client = User.find(params[:client_id])
-  
-    @recommendations = @client.recommendations_as_client.includes(:product)
+    @recommendations = @client.recommendations.includes(:product)
   end
 end

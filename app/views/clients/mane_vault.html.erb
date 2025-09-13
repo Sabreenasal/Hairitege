@@ -1,10 +1,11 @@
-<!-- app/views/clients/mane_vault.html.erb -->
-
 <div class="bg-light shadow-sm py-3 px-4 d-flex justify-content-between align-items-center mb-4">
   <div>
     <%= link_to "← Back to Dashboard", stylist_dashboard_path, class: "btn btn-outline-secondary" %>
   </div>
   <div class="fw-bold fs-4 text-purple">Hairitege</div>
+  <div>
+    <%= link_to "Add Product", new_client_recommendation_path(@client), class: "btn btn-primary" %>
+  </div>
 </div>
 
 <div class="container py-5">
@@ -44,5 +45,6 @@
   }
 
   .border-purple {
-    border: 2px solid #6f42c1
-
+    border: 2px solid #6f42c1;
+  }
+</style>

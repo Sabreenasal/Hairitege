@@ -1,23 +1,19 @@
 class User < ApplicationRecord
+  # Devise modules
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  # Recommendations
-  has_many :recommendations_as_stylist, class_name: "Recommendation", foreign_key: "stylist_id", dependent: :destroy
-  has_many :recommendations_as_client, class_name: "Recommendation", foreign_key: "client_id", dependent: :destroy
+  # Role can be 'stylist' or 'client'
+  # You may want to validate presence of role:
+  validates :role, presence: true, inclusion: { in: %w[stylist client] }
 
-  # Fetch clients via recommendations (1 stylist → many clients)
-  def clients
-    User.joins(:recommendations_as_client)
-        .where(recommendations: { stylist_id: id })
-        .distinct
-  end
+  # Associations
+  # A stylist has many recommendations for their clients
+  has_many :given_recommendations, class_name: "Recommendation", foreign_key: "stylist_id", dependent: :destroy
 
-  before_validation :set_default_role, on: :create
+  # A client has many recommendations
+  has_many :recommendations, foreign_key: "client_id", dependent: :destroy
 
-  private
-
-  def set_default_role
-    self.role ||= "stylist"
-  end
+  # Helper: stylist has many clients through recommendations
+  has_many :clients, through: :given_recommendations, source: :client
 end
