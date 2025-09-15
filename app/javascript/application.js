@@ -3,6 +3,8 @@ import "@hotwired/turbo-rails"
 import "controllers"
 import "bootstrap"
 import "@popperjs/core"
+import * as bootstrap from "bootstrap"
+
 
 
 // Change to true to allow Turbo

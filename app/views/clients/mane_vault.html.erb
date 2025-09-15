@@ -1,26 +1,26 @@
-<div class="bg-light shadow-sm py-3 px-4 d-flex align-items-center position-relative mb-4">
 
+<div class="bg-light shadow-sm py-3 px-4 d-flex align-items-center position-relative mb-4">
   <div class="position-absolute start-0">
     <%= link_to "← Back", current_user.stylist? ? stylist_dashboard_path : root_path, class: "btn btn-outline-secondary" %>
   </div>
 
-  <div class="fw-bold fs-4 text-purple mx-auto text-center">
+
+  <div class="fw-bold fs-4 text-green mx-auto text-center font-lobster">
     Hairitege
   </div>
 
   <div class="position-absolute end-0 d-flex gap-2">
     <% if current_user.stylist? %>
-
       <%= link_to "Add Product", new_client_recommendation_path(@client), class: "btn btn-primary" %>
     <% else %>
-
       <%= button_to "Sign Out", destroy_user_session_path, method: :delete, class: "btn btn-outline-secondary" %>
     <% end %>
   </div>
 </div>
 
+
 <div class="container py-5">
-  <h1 class="text-center mb-5 text-purple">
+  <h1 class="text-center mb-5 text-green font-lobster">
     <%= @client.name %>'s Mane Vault
   </h1>
 
@@ -28,30 +28,33 @@
     <div class="row g-4">
       <% @recommendations.each do |rec| %>
         <div class="col-12 col-md-6 col-lg-4">
-          <div class="card shadow-sm h-100 border-purple p-3">
+          <div class="card card-blue h-100 p-3 border-blue">
             <div class="card-body d-flex flex-column justify-content-between">
 
-              <h5 class="card-title text-purple mb-2"><%= rec.product.name %></h5>
+             
+              <h5 class="card-title text-blue mb-1"><%= rec.product.name %></h5>
               <p class="card-text text-muted mb-3"><%= rec.product.brand %></p>
 
               <% if current_user.stylist? %>
-                <!-- Update Notes Form -->
-                <%= form_with model: rec, local: true do |f| %>
-                  <%= hidden_field_tag :redirect_to, request.fullpath %>
-                  <div class="mb-3">
-                    <%= f.label :notes, "Notes" %>
-                    <%= f.text_area :notes, class: "form-control", rows: 3, placeholder: "Add or edit notes..." %>
-                  </div>
-                  <%= f.submit "Save Notes", class: "btn btn-outline-primary w-100 mb-2" %>
-                <% end %>
+               
+                <button 
+                  type="button" 
+                  class="btn btn-outline-primary w-100 mb-2"
+                  data-bs-toggle="modal" 
+                  data-bs-target="#notesModal"
+                  data-notes="<%= rec.notes %>"
+                  data-action="<%= recommendation_path(rec) %>">
+                  Edit Notes
+                </button>
 
+                
                 <%= button_to "Unrecommend", client_recommendation_path(@client, rec),
                               method: :delete,
                               params: { redirect_to: request.fullpath },
                               data: { confirm: "Remove this product from the Mane Vault?" },
                               class: "btn btn-danger w-100" %>
-              <% else %>
 
+              <% else %>
                 <% if rec.notes.present? %>
                   <p class="card-text mt-2"><strong>Notes:</strong> <%= rec.notes %></p>
                 <% else %>
@@ -69,9 +72,40 @@
   <% end %>
 </div>
 
-<style>
-  .text-purple { color: #6f42c1; }
-  .border-purple { border: 2px solid #6f42c1; }
-  .card-body { padding: 1.5rem; }
-  .row.g-4 > .col-12 { margin-bottom: 1.5rem; }
-</style>
+<div class="modal fade" id="notesModal" tabindex="-1" aria-labelledby="notesModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="notesModalLabel">Edit Notes</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <%= form_with url: "#", id: "notesForm", method: :patch, local: true do |f| %>
+          <div class="mb-3">
+            <%= f.label :notes, "Notes" %>
+            <%= f.text_area :notes, class: "form-control", rows: 4, placeholder: "Add or edit notes..." %>
+          </div>
+          <%= f.submit "Save Notes", class: "btn btn-success w-100" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const notesModal = document.getElementById("notesModal");
+  notesModal.addEventListener("show.bs.modal", (event) => {
+    const button = event.relatedTarget;
+    const notes = button.getAttribute("data-notes");
+    const action = button.getAttribute("data-action");
+
+    const textarea = notesModal.querySelector("textarea");
+    const form = notesModal.querySelector("form");
+
+    textarea.value = notes;
+    form.action = action;
+  });
+});
+</script>
