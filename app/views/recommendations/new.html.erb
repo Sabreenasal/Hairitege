@@ -1,6 +1,6 @@
 <div class="bg-light shadow-sm py-3 px-4 d-flex align-items-center position-relative mb-4">
  <div class="position-absolute start-0">
-    <%= link_to "← Back to Mane Vault", mane_vault_path(@client), class: "btn btn-outline-secondary" %>
+   <%= link_to "← Back to Mane Vault", mane_vault_client_path(@client), class: "btn btn-outline-secondary" %>
   </div>
 
   <div class="fw-bold fs-4 text-purple mx-auto text-center">
@@ -23,7 +23,7 @@
           <% recommendation = @client.recommendations.find_by(product_id: product.id) %>
 
           <% if recommendation %>
-            <!-- Unrecommend Button -->
+            
             <%= button_to "Unrecommend", client_recommendation_path(@client, recommendation), 
                           method: :delete, 
                           data: { confirm: "Remove this product from the Mane Vault?" }, 
@@ -32,7 +32,7 @@
          
 
           <% else %>
-            <!-- Recommend Form -->
+            
             <%= form_with model: Recommendation.new, url: client_recommendations_path(@client), local: true do |f| %>
               <%= hidden_field_tag :redirect_to, request.fullpath %>
               <%= f.hidden_field :product_id, value: product.id %>

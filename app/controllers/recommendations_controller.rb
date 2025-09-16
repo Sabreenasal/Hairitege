@@ -49,18 +49,20 @@ end
     end
   end
 
-    def update
-  @recommendation = Recommendation.find(params[:id])
-  if @recommendation.update(recommendation_params)
-    redirect_path = params[:redirect_to].presence || client_recommendations_path(@recommendation.client)
-    redirect_to redirect_path, notice: "Notes updated!"
-  else
-    flash.now[:alert] = @recommendation.errors.full_messages.join(", ")
-    redirect_path = params[:redirect_to].presence || client_recommendations_path(@recommendation.client)
-    redirect_to redirect_path
+def update
+    if @recommendation.update(recommendation_params)
+     
+      redirect_to mane_vault_client_path(@recommendation.client), notice: "Notes updated successfully"
+    else
+    
+      @client = @recommendation.client
+      @recommendations = @client.recommendations.includes(:product)
+      flash.now[:alert] = "Failed to update notes"
+      render 'clients/mane_vault', status: :unprocessable_entity
+    end
   end
-end
-  
+
+
 def destroy
   @recommendation = Recommendation.find(params[:id])
   @client = @recommendation.client
