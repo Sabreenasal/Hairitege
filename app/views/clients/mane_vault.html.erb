@@ -1,20 +1,4 @@
-<div class="bg-light shadow-sm py-3 px-4 d-flex align-items-center position-relative mb-4">
-  <div class="position-absolute start-0">
-    <%= link_to "← Back", current_user.stylist? ? stylist_dashboard_path : root_path, class: "btn btn-outline-secondary" %>
-  </div>
-
-  <div class="fw-bold fs-4 text-green mx-auto text-center font-lobster">
-    Hairitege
-  </div>
-
-  <div class="position-absolute end-0 d-flex gap-2">
-    <% if current_user.stylist? %>
-      <%= link_to "Add Product", new_client_recommendation_path(@client), class: "btn btn-primary" %>
-    <% else %>
-      <%= button_to "Sign Out", destroy_user_session_path, method: :delete, class: "btn btn-outline-secondary" %>
-    <% end %>
-  </div>
-</div>
+<%= render 'shared/navbar' %>
 
 <div class="container py-5">
   <h1 class="text-center mb-5 text-green font-lobster mane-vault-title">
@@ -25,7 +9,7 @@
     <div class="row g-4">
       <% @recommendations.each do |rec| %>
         <div class="col-12 col-md-6 col-lg-4">
-        <div class="card green-shadow h-100 p-3 border-blue" data-recommendation-id="<%= rec.id %>">
+          <div class="card green-shadow h-100 p-3 border-blue" data-recommendation-id="<%= rec.id %>">
 
             <div class="card-body d-flex flex-column justify-content-between">
 
@@ -41,7 +25,7 @@
                   data-bs-target="#notesModal"
                   data-notes="<%= rec.notes %>"
                   data-action="<%= recommendation_path(rec) %>">
-                  Edit Notes
+                  View Notes
                 </button>
 
                 <%= button_to "Unrecommend", client_recommendation_path(@client, rec),
@@ -76,18 +60,17 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-     <%= form_with url: "#", id: "notesForm", method: :patch, local: false do |f| %>
+        <%= form_with url: "#", id: "notesForm", method: :patch, local: false do |f| %>
 
-  <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+          <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
 
-  <div class="mb-3">
-    <%= label_tag "recommendation_notes", "Notes" %>
-    <%= text_area_tag "recommendation[notes]", nil, class: "form-control", rows: 4, placeholder: "Add or edit notes..." %>
-  </div>
+          <div class="mb-3">
+            <%= label_tag "recommendation_notes", "Notes" %>
+            <%= text_area_tag "recommendation[notes]", nil, class: "form-control", rows: 4, placeholder: "Add or edit notes..." %>
+          </div>
 
-  <%= submit_tag "Save Notes", class: "btn btn-success w-100" %>
-<% end %>
-
+          <%= submit_tag "Save Notes", class: "btn btn-success w-100" %>
+        <% end %>
 
       </div>
     </div>

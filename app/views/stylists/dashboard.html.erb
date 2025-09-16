@@ -1,12 +1,4 @@
-<div class="bg-light shadow-sm py-3 px-4 d-flex justify-content-between align-items-center mb-4">
-  <div>
-    <%= link_to "← Back to Home", root_path, class: "btn btn-outline-secondary" %>
-  </div>
-  <div class="fw-bold fs-4">Hairitege</div>
-  <div>
-    <%= button_to "Sign Out", destroy_user_session_path, method: :delete, class: "btn btn-danger" %>
-  </div>
-</div>
+<%= render 'shared/navbar' %>
 
 <div class="container py-5">
   <h2 class="text-center mb-4">Your Clients</h2>
@@ -21,7 +13,7 @@
               <p class="card-text text-muted"><%= client.email %></p>
               <%= link_to "Open Mane-Vault", mane_vault_client_path(client), class: "btn btn-primary mt-3" %>
 
-                    <%= link_to "Remove Client", remove_client_path(client), 
+              <%= link_to "Remove Client", remove_client_path(client), 
                   method: :delete, 
                   data: { confirm: "Are you sure you want to remove this client?" }, 
                   class: "btn btn-danger btn-sm" %>

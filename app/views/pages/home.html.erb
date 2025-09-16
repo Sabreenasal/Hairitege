@@ -1,23 +1,12 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
-  <div class="container">
-   
-    <span class="navbar-brand mb-0" style="font-family: 'Lobster', cursive; font-size: 1.8rem; color: #2e7d32;">
-      Hairitege
-    </span>
-  </div>
-</nav>
-
-
+<%= render 'shared/navbar' %>
 
 <div class="container-fluid py-5 position-relative" style="background: linear-gradient(135deg, #1b5e20 0%, #66bb6a 100%);">
 
- 
   <div class="container position-relative" style="z-index: 2;">
     <div class="row justify-content-center">
 
       <div class="col-lg-8 text-center">
 
-      
         <div class="card p-4 p-lg-5 shadow-lg border-light mb-4" style="background-color: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: 20px;">
           <h1 class="display-4 fw-bold text-white mb-3" style="font-family: 'Lora', serif;">Welcome to Hairitege</h1>
           <p class="lead text-white mb-4" style="font-family: 'Roboto', sans-serif;">Empowering stylists to guide clients on their healthy hair journey.</p>
@@ -28,19 +17,17 @@
               <%= button_to "Sign Out", destroy_user_session_path, method: :delete, class: "btn btn-outline-light btn-lg px-4 py-2" %>
             </div>
 
-     <% if current_user.role == "stylist" %>
-  <%= button_to "Go to Your Dashboard", 
+            <% if current_user.role == "stylist" %>
+              <%= button_to "Go to Your Dashboard", 
                 stylist_dashboard_path, 
                 method: :get,
                 class: "btn btn-success btn-lg px-5 py-3 fw-bold mb-2 shadow-sm" %>
-<% elsif current_user.role == "client" %>
-  <%= button_to "Go to Your Mane Vault", 
+            <% elsif current_user.role == "client" %>
+              <%= button_to "Go to Your Mane Vault", 
                 mane_vault_path(client_id: current_user.id), 
                 method: :get,
                 class: "btn btn-success btn-lg px-5 py-3 fw-bold mb-2 shadow-sm" %>
-<% end %>
-
-
+            <% end %>
 
           <% else %>
             <div class="d-flex flex-wrap gap-3 justify-content-center mt-4">
@@ -50,7 +37,6 @@
           <% end %>
         </div>
 
-        <!-- Stylist Tools Card (smaller) -->
         <div class="bg-white rounded-pill shadow-lg p-3 p-lg-4 text-center mx-auto" style="border: 3px solid #2e7d32; max-width: 600px;">
           <h2 class="mb-3 text-success" style="font-family: 'Lora', serif; font-size: 1.75rem;">Stylist Tools</h2>
           <div class="row gx-3 gy-2 justify-content-center">
@@ -77,7 +63,6 @@
     </div>
   </div>
 
- 
   <div class="position-absolute w-100 bottom-0 start-0" style="z-index: 1;">
     <%= image_tag 'untitled-design.png', class: "img-fluid w-100", style: "max-height: 400px; object-fit: cover;" %>
   </div>
