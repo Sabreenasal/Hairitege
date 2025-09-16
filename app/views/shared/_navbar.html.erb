@@ -17,21 +17,22 @@
       <% end %>
     </div>
 
-    <div class="fw-bold fs-4 text-center" style="font-family: 'Lobster', cursive; font-size: 1.8rem; color: #2e7d32;">
-      Hairitege
-    </div>
+<div class="fw-bold fs-4 text-center" style="font-family: 'Lobster', cursive; font-size: 1.8rem; color: #2e7d32;">
+  Hairitege
+</div>
 
-    <div class="d-flex gap-2">
-      <% if current_user.stylist? && defined?(@client) && controller_name != 'recommendations' %>
+<div class="d-flex gap-2">
+  <% if current_user&.stylist? && defined?(@client) && controller_name != 'recommendations' %>
+    <%= link_to "Add Product", new_client_recommendation_path(@client), class: "btn btn-primary" %>
+  <% end %>
 
-        <%= link_to "Add Product", new_client_recommendation_path(@client), class: "btn btn-primary" %>
-      <% end %>
+  <% if controller_name != 'recommendations' %>
+    <% if current_user %>
+      <%= link_to "Sign Out", destroy_user_session_path, method: :delete, class: "btn btn-outline-danger" %>
+    <% else %>
+      <%= link_to "Sign In", new_user_session_path, class: "btn btn-primary" %>
+    <% end %>
+  <% end %>
+</div>
 
-      <% if controller_name != 'recommendations' %>
-
-        <%= button_to "Sign Out", destroy_user_session_path, method: :delete, class: "btn btn-outline-secondary" %>
-      <% end %>
-    </div>
-
-  </div>
 </nav>

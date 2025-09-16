@@ -13,10 +13,7 @@
               <p class="card-text text-muted"><%= client.email %></p>
               <%= link_to "Open Mane-Vault", mane_vault_client_path(client), class: "btn btn-primary mt-3" %>
 
-              <%= link_to "Remove Client", remove_client_path(client), 
-                  method: :delete, 
-                  data: { confirm: "Are you sure you want to remove this client?" }, 
-                  class: "btn btn-danger btn-sm" %>
+             <%= button_to "Remove", remove_client_path(client), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger" %>
 
             </div>
           </div>

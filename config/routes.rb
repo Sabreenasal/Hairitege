@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   devise_for :users
 
   get "stylists/dashboard", to: "stylists#dashboard", as: :stylist_dashboard
-  # get "clients/:client_id/mane_vault", to: "clients#mane_vault", as: :mane_vault
+  
   delete "stylists/:id/remove_client", to: "stylists#remove_client", as: :remove_client
 
 

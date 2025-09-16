@@ -33,20 +33,6 @@ class StylistsController < ApplicationController
       flash.now[:alert] = @new_client.errors.full_messages.join(", ")
       render :dashboard
     end
-
-    def remove_client
-      client = User.find(params[:id])
-      recommendation = Recommendation.find_by(stylist_id: current_user.id, client_id: client.id)
-
-      if recommendation
-        recommendation.destroy
-        flash[:notice] = "#{client.name} has been removed from your clients."
-      else
-        flash[:alert] = "Client not found."
-      end
-
-      redirect_to stylist_dashboard_path
-    end
   end
 
   def remove_client
@@ -66,3 +52,4 @@ class StylistsController < ApplicationController
     params.require(:user).permit(:name, :email, :password)
   end
 end
+
