@@ -24,7 +24,7 @@
                 class: "btn btn-success btn-lg px-5 py-3 fw-bold mb-2 shadow-sm" %>
             <% elsif current_user.role == "client" %>
               <%= button_to "Go to Your Mane Vault", 
-                mane_vault_path(client_id: current_user.id), 
+                mane_vault_client_path(current_user), 
                 method: :get,
                 class: "btn btn-success btn-lg px-5 py-3 fw-bold mb-2 shadow-sm" %>
             <% end %>

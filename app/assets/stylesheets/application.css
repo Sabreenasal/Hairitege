@@ -185,3 +185,14 @@
   background: linear-gradient(90deg, #28a745, #0d6efd); /* green to blue */
   border-radius: 2px;
 }
+
+/* html, body {
+  height: 100%;
+  overflow: hidden;
+} */
+
+.main-container {
+  height: 100vh; 
+  display: flex;
+  flex-direction: column;
+}
