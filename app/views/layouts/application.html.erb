@@ -8,11 +8,17 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
+<%= favicon_link_tag "Hairitege_logo.png", rel: "icon", type: "image/png", sizes: "32x32" %>
+<%= favicon_link_tag "Hairitege_logo.png", rel: "icon", type: "image/png", sizes: "64x64" %>
+<%= favicon_link_tag "Hairitege_logo.png", rel: "icon", type: "image/png", sizes: "128x128" %>
+
+<link rel="apple-touch-icon" sizes="180x180" href="<%= asset_path 'Hairitege_logo.png' %>">
+
+
+
+
     <%= yield :head %>
 
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
 
     <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
 
@@ -25,10 +31,6 @@
   </head>
 
   <body>
- <!--   <div class="container my-3">-->
-    <%#= render_breadcrumbs(@breadcrumbs) %>
-<!--  </div>-->
-
     <%= yield %>
   </body>
 </html>
