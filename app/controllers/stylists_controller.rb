@@ -8,8 +8,8 @@ class StylistsController < ApplicationController
     @new_client = User.new
 
     @breadcrumbs = [
-      ["Home", root_path],
-      ["Dashboard", stylist_dashboard_path],
+      [ "Home", root_path ],
+      [ "Dashboard", stylist_dashboard_path ]
     ]
   end
 
@@ -38,8 +38,8 @@ class StylistsController < ApplicationController
       @clients = @stylist.clients.reload
       flash.now[:alert] = @new_client.errors.full_messages.join(", ")
       @breadcrumbs = [
-        ["Home", root_path],
-        ["Dashboard", stylist_dashboard_path],
+        [ "Home", root_path ],
+        [ "Dashboard", stylist_dashboard_path ]
       ]
       render :dashboard
     end

@@ -1,6 +1,6 @@
 class RecommendationsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_recommendation, only: [:update, :destroy]
+  before_action :set_recommendation, only: [ :update, :destroy ]
 
   def index
     @client = User.find_by(id: params[:client_id])
@@ -24,11 +24,11 @@ class RecommendationsController < ApplicationController
 
     @recommendation = Recommendation.new(client: @client, stylist: current_user)
     @breadcrumbs = [
-      ["Home", root_path],
-      ["Dashboard", stylist_dashboard_path],
-      [@client.name, mane_vault_client_path(@client)],
-      ["Recommendations", client_recommendations_path(@client)],
-      ["New Recommendation", nil],
+      [ "Home", root_path ],
+      [ "Dashboard", stylist_dashboard_path ],
+      [ @client.name, mane_vault_client_path(@client) ],
+      [ "Recommendations", client_recommendations_path(@client) ],
+      [ "New Recommendation", nil ]
     ]
   end
 

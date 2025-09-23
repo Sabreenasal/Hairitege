@@ -19,20 +19,19 @@
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #
 class User < ApplicationRecord
- 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
- 
+
   validates :role, presence: true, inclusion: { in: %w[stylist client] }
 
-  
+
   has_many :given_recommendations, class_name: "Recommendation", foreign_key: "stylist_id", dependent: :destroy
 
   has_many :recommendations, foreign_key: "client_id", dependent: :destroy
 
   has_many :clients, -> { distinct }, through: :given_recommendations, source: :client
-   
+
   def stylist?
     role == "stylist"
   end
