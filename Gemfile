@@ -76,6 +76,8 @@ gem "rollbar"
 gem "simple_form"
 gem "strip_attributes"
 gem "validate_url"
+gem 'smarter_csv'
+
 
 group :development do
   gem "annotaterb"

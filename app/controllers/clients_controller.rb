@@ -4,18 +4,20 @@ class ClientsController < ApplicationController
   def mane_vault
     client_id = params[:id] || params[:client_id]
     @client = User.find_by(id: client_id)
-
+    
     unless @client
       flash[:alert] = "Client not found"
       redirect_to root_path and return
     end
 
+    @products = Product.all.uniq { |p| [p.name, p.brand] }
+
     # Preload recommendations with their products
     @recommendations = @client.recommendations.includes(:product)
     @breadcrumbs = [
-      [ "Home", root_path ],
-      [ "Dashboard", stylist_dashboard_path ],
-      [ @client.name, mane_vault_client_path(@client) ]
+      ["Home", root_path],
+      ["Dashboard", stylist_dashboard_path],
+      [@client.name, mane_vault_client_path(@client)]
     ]
   end
 end

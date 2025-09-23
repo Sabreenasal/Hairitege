@@ -1,42 +1,31 @@
 class RecommendationsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_recommendation, only: [ :update, :destroy ]
-
-  def index
-    @client = User.find_by(id: params[:client_id])
-    unless @client
-      redirect_to root_path, alert: "Client not found"
-      return
-    end
-
-    redirect_to new_client_recommendation_path(@client)
-  end
+  before_action :set_recommendation, only: [:update, :destroy]
 
   def new
     @client = User.find_by(id: params[:client_id])
     unless @client
-      redirect_to root_path, alert: "Client not found"
-      return
+      redirect_to root_path, alert: "Client not found" and return
     end
 
-    @shampoo = Product.find_by(name: "Gentle Shampoo")
-    @conditioner = Product.find_by(name: "Hydrating Conditioner")
+    # Load unique products based on name + brand
+    @products = Product.all.uniq { |p| [p.name, p.brand] }
+
 
     @recommendation = Recommendation.new(client: @client, stylist: current_user)
     @breadcrumbs = [
-      [ "Home", root_path ],
-      [ "Dashboard", stylist_dashboard_path ],
-      [ @client.name, mane_vault_client_path(@client) ],
-      [ "Recommendations", client_recommendations_path(@client) ],
-      [ "New Recommendation", nil ]
+      ["Home", root_path],
+      ["Dashboard", stylist_dashboard_path],
+      [@client.name, mane_vault_client_path(@client)],
+      ["Recommendations", client_recommendations_path(@client)],
+      ["New Recommendation", nil]
     ]
   end
 
   def create
     @client = User.find_by(id: params[:client_id])
     unless @client
-      redirect_to root_path, alert: "Client not found"
-      return
+      redirect_to root_path, alert: "Client not found" and return
     end
 
     @recommendation = Recommendation.new(recommendation_params)
@@ -63,7 +52,6 @@ class RecommendationsController < ApplicationController
   end
 
   def destroy
-    @recommendation = Recommendation.find(params[:id])
     @client = @recommendation.client
     @recommendation.destroy
 
