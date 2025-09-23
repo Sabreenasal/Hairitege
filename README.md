@@ -148,10 +148,6 @@ A: Run `bin/dev` instead of `rails server` to ensure assets are compiled.
 
 ---
 
-## 📡 API Documentation (Optional)
-
-If you expose endpoints, document them here:
-
 ### Authentication
 
 **POST** `/api/v1/login`
@@ -185,7 +181,7 @@ Response:
 
 ## 📛 Naming
 
-Repository name: **hairitege** ✅ 
+Repository name: **Hairitege** ✅ 
 ---
 
 ## 📄 License

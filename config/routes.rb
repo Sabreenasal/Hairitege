@@ -5,11 +5,10 @@ Rails.application.routes.draw do
   devise_for :users
 
   get "stylists/dashboard", to: "stylists#dashboard", as: :stylist_dashboard
-  
+
   delete "stylists/:id/remove_client", to: "stylists#remove_client", as: :remove_client
 
-
-  resources :recommendations, only: [:edit, :update]
+  resources :recommendations, only: [ :edit, :update ]
 
   resources :stylists, only: [] do
     collection do
@@ -17,12 +16,11 @@ Rails.application.routes.draw do
     end
   end
 
- resources :clients, only: [] do
-  member do
-    get :mane_vault   
+  resources :clients, only: [] do
+    member do
+      get :mane_vault
+    end
+
+    resources :recommendations, only: [ :new, :create, :destroy, :index ]
   end
-
-  resources :recommendations, only: [:new, :create, :destroy, :index]
-end
-
 end

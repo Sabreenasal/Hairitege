@@ -1,18 +1,16 @@
 class RecommendationsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_recommendation, only: [:update, :destroy]
-
+  before_action :set_recommendation, only: [ :update, :destroy ]
 
   def index
-  @client = User.find_by(id: params[:client_id])
-  unless @client
-    redirect_to root_path, alert: "Client not found"
-    return
+    @client = User.find_by(id: params[:client_id])
+    unless @client
+      redirect_to root_path, alert: "Client not found"
+      return
+    end
+
+    redirect_to new_client_recommendation_path(@client)
   end
-
-   redirect_to new_client_recommendation_path(@client)
-end
-
 
   def new
     @client = User.find_by(id: params[:client_id])
@@ -21,15 +19,19 @@ end
       return
     end
 
- 
     @shampoo = Product.find_by(name: "Gentle Shampoo")
     @conditioner = Product.find_by(name: "Hydrating Conditioner")
 
- 
     @recommendation = Recommendation.new(client: @client, stylist: current_user)
+    @breadcrumbs = [
+      [ "Home", root_path ],
+      [ "Dashboard", stylist_dashboard_path ],
+      [ @client.name, mane_vault_client_path(@client) ],
+      [ "Recommendations", client_recommendations_path(@client) ],
+      [ "New Recommendation", nil ]
+    ]
   end
 
-  
   def create
     @client = User.find_by(id: params[:client_id])
     unless @client
@@ -49,32 +51,29 @@ end
     end
   end
 
-def update
+  def update
     if @recommendation.update(recommendation_params)
-     
       redirect_to mane_vault_client_path(@recommendation.client), notice: "Notes updated successfully"
     else
-    
       @client = @recommendation.client
       @recommendations = @client.recommendations.includes(:product)
       flash.now[:alert] = "Failed to update notes"
-      render 'clients/mane_vault', status: :unprocessable_entity
+      render "clients/mane_vault", status: :unprocessable_entity
     end
   end
 
+  def destroy
+    @recommendation = Recommendation.find(params[:id])
+    @client = @recommendation.client
+    @recommendation.destroy
 
-def destroy
-  @recommendation = Recommendation.find(params[:id])
-  @client = @recommendation.client
-  @recommendation.destroy
+    redirect_path = params[:redirect_to].presence || client_recommendations_path(@client)
 
-  redirect_path = params[:redirect_to].presence || client_recommendations_path(@client)
-  
-  respond_to do |format|
-    format.turbo_stream
-    format.html { redirect_to redirect_path, notice: "Recommendation removed!" }
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to redirect_path, notice: "Recommendation removed!" }
+    end
   end
-end
 
   private
 

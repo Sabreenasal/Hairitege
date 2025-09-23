@@ -1,43 +1,52 @@
 <%= render 'shared/navbar' %>
-<h2 class="mb-4 text-center">Recommend Products for <%= @client.name %></h2>
+<%= render 'shared/breadcrumbs' %>
 
-<div class="row justify-content-center g-4">
-  <% [@shampoo, @conditioner].each do |product| %>
-    <% next unless product %>
-    <div class="col-md-5 mb-4">
-      <div class="card h-100 shadow-sm p-3">
-        <div class="card-body text-center d-flex flex-column justify-content-between">
+<div class="container py-5">
+  <h2 class="text-center mb-5 text-green font-lobster">
+    Recommend Products for <%= @client.name %>
+  </h2>
 
-          <h4 class="card-title mb-2"><%= product.name %></h4>
-          <p class="card-text mb-3"><%= product.description %></p>
+  <% products = [@shampoo, @conditioner].compact %>
+  <% if products.any? %>
+    <div class="row g-4">
+      <% products.each do |product| %>
+        <div class="col-12 col-md-6 col-lg-4">
+          <div class="card green-shadow h-100 p-3 border-blue" data-product-id="<%= product.id %>">
+            <div class="card-body d-flex flex-column justify-content-between text-center">
 
-          <% recommendation = @client.recommendations.find_by(product_id: product.id) %>
+              <h4 class="card-title text-blue mb-2"><%= product.name %></h4>
+              <p class="card-text text-muted mb-3"><%= product.description %></p>
 
-          <% if recommendation %>
+              <% recommendation = @client.recommendations.find_by(product_id: product.id) %>
 
-            <%= button_to "Unrecommend", client_recommendation_path(@client, recommendation), 
-                          method: :delete, 
-                          data: { confirm: "Remove this product from the Mane Vault?" }, 
-                          class: "btn btn-danger w-100 mb-3" %>
+              <% if recommendation %>
+                <%= button_to "Unrecommend", client_recommendation_path(@client, recommendation), 
+                              method: :delete, 
+                              data: { confirm: "Remove this product from the Mane Vault?" }, 
+                              class: "btn btn-danger w-100 mb-2" %>
+              <% else %>
+                <%= form_with model: Recommendation.new, url: client_recommendations_path(@client), local: true do |f| %>
+                  <%= hidden_field_tag :redirect_to, request.fullpath %>
+                  <%= f.hidden_field :product_id, value: product.id %>
+                  <%= f.submit "Recommend", class: "btn btn-primary w-100" %>
+                <% end %>
+              <% end %>
 
-          <% else %>
-
-            <%= form_with model: Recommendation.new, url: client_recommendations_path(@client), local: true do |f| %>
-              <%= hidden_field_tag :redirect_to, request.fullpath %>
-              <%= f.hidden_field :product_id, value: product.id %>
-
-              <%= f.submit "Recommend", class: "btn btn-primary w-100" %>
-            <% end %>
-          <% end %>
-
+            </div>
+          </div>
         </div>
-      </div>
+      <% end %>
     </div>
+  <% else %>
+    <p class="text-center text-muted fs-5">No products available to recommend.</p>
   <% end %>
 </div>
 
 <style>
-  .text-purple { color: #6f42c1; }
+  .text-green { color: #2e7d32; }
+  .text-blue { color: #0d6efd; }
+  .font-lobster { font-family: 'Lobster', cursive; }
+  .green-shadow { box-shadow: 0 4px 6px rgba(46,125,50,0.3); border-radius: 0.5rem; }
+  .border-blue { border: 1px solid #0d6efd; }
   .card-body { padding: 1.5rem; }
-  .row.g-4 > .col-md-5 { margin-bottom: 1.5rem; }
 </style>
