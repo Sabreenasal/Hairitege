@@ -23,8 +23,7 @@ Rails.application.routes.draw do
     resources :recommendations, only: [:new, :create, :destroy, :index]
   end
 
-  # Products routes (not nested for import)
   resources :products do
-    collection { post :import } # adds import_products_path
+    collection { post :import } 
   end
 end

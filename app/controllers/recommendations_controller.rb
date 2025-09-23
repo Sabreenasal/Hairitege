@@ -2,6 +2,16 @@ class RecommendationsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_recommendation, only: [:update, :destroy]
 
+  def index
+    @client = User.find_by(id: params[:client_id])
+    unless @client
+      redirect_to root_path, alert: "Client not found"
+      return
+    end
+
+    redirect_to new_client_recommendation_path(@client)
+  end
+
   def new
     @client = User.find_by(id: params[:client_id])
     unless @client
@@ -10,7 +20,6 @@ class RecommendationsController < ApplicationController
 
     # Load unique products based on name + brand
     @products = Product.all.uniq { |p| [p.name, p.brand] }
-
 
     @recommendation = Recommendation.new(client: @client, stylist: current_user)
     @breadcrumbs = [
