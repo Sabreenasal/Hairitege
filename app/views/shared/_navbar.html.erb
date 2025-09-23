@@ -1,11 +1,11 @@
 <nav class="navbar navbar-expand-lg navbar-light sticky-top bg-light shadow-sm py-3 px-4">
   <div class="container d-flex justify-content-between align-items-center">
 
-<a class="navbar-brand d-flex align-items-center p-0" href="/">
-  <%= image_tag "Hairitege_logo_full.png", 
+    <a class="navbar-brand d-flex align-items-center p-0" href="/">
+      <%= image_tag "Hairitege_logo_full.png", 
         alt: "Hairitege Full Logo", 
         class: "logo" %>
-</a>
+    </a>
 
     <div class="d-flex gap-2">
       <% if current_user&.stylist? && defined?(@client) && controller_name != 'recommendations' %>

@@ -9,7 +9,7 @@ class StylistsController < ApplicationController
 
     @breadcrumbs = [
       ["Home", root_path],
-      ["Dashboard", stylist_dashboard_path]
+      ["Dashboard", stylist_dashboard_path],
     ]
   end
 
@@ -27,7 +27,7 @@ class StylistsController < ApplicationController
       Recommendation.create!(
         stylist: current_user,
         client: @new_client,
-        product: default_product
+        product: default_product,
       )
 
       redirect_to stylist_dashboard_path, notice: "Client added successfully."
@@ -39,7 +39,7 @@ class StylistsController < ApplicationController
       flash.now[:alert] = @new_client.errors.full_messages.join(", ")
       @breadcrumbs = [
         ["Home", root_path],
-        ["Dashboard", stylist_dashboard_path]
+        ["Dashboard", stylist_dashboard_path],
       ]
       render :dashboard
     end

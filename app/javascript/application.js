@@ -1,8 +1,4 @@
-
+// Import Turbo and Stimulus
 import "@hotwired/turbo-rails"
-import "@rails/ujs"           
 import "controllers"
-
-
-import "bootstrap"
-import "@popperjs/core"
+import "@rails/ujs" // enables method: :delete, CSRF protection, etc.
