@@ -63,6 +63,7 @@ Before running the app, you need to set up some basic settings called **environm
 DATABASE_URL=postgres://localhost/hairitege_dev
 SECRET_KEY_BASE=your-secret-key
 RAILS_ENV=development
+```
 
 ---
 
@@ -117,9 +118,9 @@ Products
 
 *(Add an image version of my ERD at `/docs/erd.png` and embed it with:)*
 
-```markdown
-![ERD](docs/erd.png)
-```
+
+![ERD](erd.png)
+
 
 ---
 
